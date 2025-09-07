@@ -1,19 +1,39 @@
 package com.example.render;
 
 public class Glyph {
-    // Smell: style stored per instance → not memory efficient
+    // Extrinsic state: unique per glyph instance
     private final char ch;
-    private final String font;
-    private final int size;
-    private final boolean bold;
+    
+    // Intrinsic state: shared TextStyle flyweight
+    private final TextStyle style;
 
-    public Glyph(char ch, String font, int size, boolean bold) {
-        this.ch = ch; this.font = font; this.size = size; this.bold = bold;
+    public Glyph(char ch, TextStyle style) {
+        this.ch = ch;
+        this.style = style;
     }
 
-    public int drawCost() { return size + (bold ? 10 : 0); }
-    public char getCh() { return ch; }
-    public String getFont() { return font; }
-    public int getSize() { return size; }
-    public boolean isBold() { return bold; }
+    public int drawCost() { 
+        return style.getDrawCost(); 
+    }
+    
+    public char getCh() { 
+        return ch; 
+    }
+    
+    public TextStyle getStyle() {
+        return style;
+    }
+    
+    // Legacy methods for compatibility (delegate to TextStyle)
+    public String getFont() { 
+        return style.getFont(); 
+    }
+    
+    public int getSize() { 
+        return style.getSize(); 
+    }
+    
+    public boolean isBold() { 
+        return style.isBold(); 
+    }
 }
